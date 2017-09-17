@@ -8,10 +8,6 @@ int main()
 {
 
     // k = 8822719; p = 5889459727; r = 5801232537;
-    //
-    // real    1m0.845s
-    // user    1m0.577s
-    // sys     0m0.000s
 
     static const mpz_class r = 5801232537_mpz;
 
