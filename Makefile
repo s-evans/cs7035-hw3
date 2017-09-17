@@ -2,14 +2,14 @@
 OBJECTS := $(subst .cpp,.o,$(wildcard *.cpp))
 
 CXX_FLAGS := -MD -Wall -Wextra 
-LD_FLAGS :=
+LD_FLAGS := -lgmpxx -lgmp
 
 all: $(OBJECTS)
 
 %.o: %.cpp
-	$(CXX) $< -o $@ -lgmpxx -lgmp
+	$(CXX) $(CXX_FLAGS) $(LD_FLAGS) $< -o $@
 
 clean:
-	rm *.o
+	rm -f *.o *.d
 
 -include $(OBJECTS:.o=.d)
