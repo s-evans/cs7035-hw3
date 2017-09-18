@@ -6,9 +6,10 @@
 // Fermat’s Test
 // If an-1 = 1 (mod n) then the function returns true since n might be prime, otherwise it returns false as n is composite.
 
-inline bool fermat_test( mpz_class const& base, mpz_class const& possible_prime )
+template<class Base, class Prime>
+bool fermat_test( Base const& base, Prime const& possible_prime )
 {
-    return ( discrete_exponent( base, possible_prime - 1, possible_prime ) == 1 );
+    return ( discrete_exponent<Base, Prime, Prime>( base, possible_prime - 1, possible_prime ) == 1 );
 }
 
 #endif // FERMAT_TEST_H

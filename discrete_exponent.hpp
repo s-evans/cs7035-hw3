@@ -1,19 +1,23 @@
 #ifndef DISCRETE_EXPONENT_H
 #define DISCRETE_EXPONENT_H
 
-#include "gmpxx.h"
+#include "identity.hpp"
 
-inline mpz_class discrete_exponent( mpz_class base, mpz_class exponent, mpz_class const& mod )
+template<class Base, class Exponent, class Modulus>
+Base discrete_exponent( Base base, Exponent exponent, Modulus const& modulus )
 {
-    mpz_class result = 1;
+    Base result = identity<Base>( tag<Base>{} );
 
     while ( exponent > 0 ) {
-        if ( exponent % 2 == 1 ) {
-            result = ( result * base ) % mod;
-        }
 
+        if ( exponent % 2 == 1 ) {
+            result *= base;
+            result %= modulus;
+        } 
+
+        base *= base;
+        base %= modulus;
         exponent /= 2;
-        base = ( base * base ) % mod;
     }
 
     return result;
