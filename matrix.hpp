@@ -5,7 +5,6 @@
 #include <string>
 #include <stdexcept>
 #include <sstream>
-#include <type_traits>
 #include "tag.hpp"
 
 // Generic matrix type
@@ -28,12 +27,12 @@ public:
     enum { extent = N * M };
 
     // Is matrix square?
-    enum { is_square = std::is_same<std::integral_constant<size_t, N>, std::integral_constant<size_t, M>>::value };
+    enum { is_square = ( N == M ) };
 
     // Constructor
     // Row major order
-    template<class... Args> constexpr
-        matrix( Args&& ... args )
+    template<class... Args> constexpr inline
+    matrix( Args&& ... args )
         : v_{ std::forward<Args>( args )... }
     {
     }
@@ -69,7 +68,7 @@ public:
     }
 
     // Scalar multiplication
-    template<class S> constexpr matrix& operator*=( S const& rhs )
+    template<class S> inline constexpr matrix& operator*=( S const& rhs )
     {
         for ( size_t i = 0 ; i < extent ; ++i ) {
             v_[i] *= rhs;
@@ -79,7 +78,7 @@ public:
     }
 
     // Scalar modular division
-    template<class S> constexpr matrix& operator%=( S const& rhs )
+    template<class S> inline constexpr matrix& operator%=( S const& rhs )
     {
         for ( size_t i = 0 ; i < extent ; ++i ) {
             v_[i] %= rhs;
@@ -89,10 +88,10 @@ public:
     }
 
     // Square matrix multiplication
-    template<size_t X = N, size_t Y = M>
-    typename std::enable_if<std::is_same<std::integral_constant<size_t, X>, std::integral_constant<size_t, Y>>::value, matrix&>::type
-    operator*=( matrix const& rhs )
+    inline matrix& operator*=( matrix const& rhs )
     {
+        static_assert( is_square, "matrices must both be square" );
+
         matrix tmp;
 
         for ( size_t j = 0 ; j < N ; ++j ) {
@@ -112,7 +111,8 @@ public:
     }
 
     // Convert matrix to a string
-    std::string to_string() const {
+    std::string to_string() const
+    {
         std::ostringstream oss;
 
         for ( size_t j = 0 ; j < col_extent ; ++j ) {
@@ -121,7 +121,7 @@ public:
 
             for ( size_t i = 0 ; i < row_extent ; ++i ) {
 
-                oss << operator()(i, j);
+                oss << operator()( i, j );
 
                 if ( i != col_extent - 1 ) {
                     oss << " ";
@@ -135,7 +135,8 @@ public:
     }
 
     // Output matrix to a stream
-    friend std::ostream& operator<<( std::ostream& os, matrix const& rhs) {
+    friend std::ostream& operator<<( std::ostream& os, matrix const& rhs )
+    {
         return os << rhs.to_string();
     }
 
@@ -155,7 +156,7 @@ private:
 };
 
 // Matrix multiplication
-template<class T, size_t N, size_t M, size_t P> constexpr matrix<T, N, P> operator*( matrix<T, N, M> const& lhs, matrix<T, M, P> const& rhs )
+template<class T, size_t N, size_t M, size_t P> inline constexpr matrix<T, N, P> operator*( matrix<T, N, M> const& lhs, matrix<T, M, P> const& rhs )
 {
     matrix<T, N, P> tmp{0,};
 
@@ -171,7 +172,7 @@ template<class T, size_t N, size_t M, size_t P> constexpr matrix<T, N, P> operat
 }
 
 // Scalar modular division
-template<class S, class T, size_t N, size_t M> constexpr matrix<T, N, M> operator%( matrix<T, N, M> const& lhs, S const& rhs )
+template<class S, class T, size_t N, size_t M> inline constexpr matrix<T, N, M> operator%( matrix<T, N, M> const& lhs, S const& rhs )
 {
     matrix<T, N, M> tmp = lhs;
 
@@ -185,11 +186,12 @@ template<class S, class T, size_t N, size_t M> constexpr matrix<T, N, M> operato
 }
 
 // Create an identity matrix
-template<class T, size_t N> constexpr matrix<T, N, N> identity( tag< matrix<T, N, N> > ) {
-    matrix<T,N,N> tmp{0,};
+template<class T, size_t N> inline constexpr matrix<T, N, N> identity( tag< matrix<T, N, N> > )
+{
+    matrix<T, N, N> tmp{0,};
 
     for ( size_t i = 0 ; i < N ; ++i ) {
-        tmp(i,i) = 1;
+        tmp( i, i ) = 1;
     }
 
     return tmp;
