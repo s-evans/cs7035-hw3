@@ -5,7 +5,7 @@
 #include <string>
 #include <stdexcept>
 #include <sstream>
-#include "tag.hpp"
+#include "identity.hpp"
 
 // Generic matrix type
 template<class T, size_t N, size_t M>
@@ -28,6 +28,20 @@ public:
 
     // Is matrix square?
     enum { is_square = ( N == M ) };
+
+    // Create an identity matrix
+    static inline constexpr matrix identity()
+    {
+        static_assert(matrix::is_square, "identity is defined for square matrices only");
+
+        matrix tmp{0,};
+
+        for ( size_t i = 0 ; i < N ; ++i ) {
+            tmp( i, i ) = 1;
+        }
+
+        return tmp;
+    }
 
     // Constructor
     // Row major order
@@ -185,16 +199,10 @@ template<class S, class T, size_t N, size_t M> inline constexpr matrix<T, N, M> 
     return tmp;
 }
 
-// Create an identity matrix
-template<class T, size_t N> inline constexpr matrix<T, N, N> identity( tag< matrix<T, N, N> > )
-{
-    matrix<T, N, N> tmp{0,};
-
-    for ( size_t i = 0 ; i < N ; ++i ) {
-        tmp( i, i ) = 1;
+template<class T, size_t N, size_t M> struct identity<matrix<T, N, M>> {
+    static inline constexpr matrix<T, N, M> get() {
+        return matrix<T, N, M>::identity();
     }
-
-    return tmp;
-}
+};
 
 #endif // MATRIX_H

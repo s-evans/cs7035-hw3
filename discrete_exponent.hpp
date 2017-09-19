@@ -4,10 +4,8 @@
 #include "identity.hpp"
 
 template<class Base, class Exponent, class Modulus>
-Base discrete_exponent( Base base, Exponent exponent, Modulus const& modulus )
+Base discrete_exponent( Base base, Exponent exponent, Modulus const& modulus, Base result = identity<Base>::get() )
 {
-    Base result = identity<Base>( tag<Base>{} );
-
     while ( exponent > 0 ) {
 
         if ( exponent % 2 == 1 ) {

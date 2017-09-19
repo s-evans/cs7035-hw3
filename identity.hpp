@@ -1,11 +1,11 @@
 #ifndef IDENTITY_H
 #define IDENTITY_H
 
-#include "identity.hpp"
-#include "tag.hpp"
-
-template<typename T> T identity( tag<T> ) {
-    return 1;
-}
+template<class T>
+struct identity {
+    static inline constexpr T get() {
+        return 1;
+    }
+};
 
 #endif // IDENTITY_H
