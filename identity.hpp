@@ -3,7 +3,8 @@
 
 template<class T>
 struct identity {
-    static inline constexpr T get() {
+    using type = T;
+    static inline constexpr type get() {
         return 1;
     }
 };

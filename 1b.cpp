@@ -1,8 +1,8 @@
-#include <cstdlib>
-#include <iostream>
-#include "gmpxx.h"
 #include "fermat_test.hpp"
 #include "fibonacci_test.hpp"
+#include "gmpxx.h"
+#include <cstdlib>
+#include <iostream>
 
 int main()
 {
@@ -10,8 +10,6 @@ int main()
     // k = 8822719; p = 5889459727; r = 5801232537;
 
     static const mpz_class r = 5801232537_mpz;
-
-    // TODO: use fibonacci test
 
     mpz_class p = r;
 
@@ -24,6 +22,10 @@ int main()
         }
 
         if ( p % 5 == 0 ) {
+            continue;
+        }
+
+        if ( !fibonacci_test( p ) ) {
             continue;
         }
 

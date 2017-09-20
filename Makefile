@@ -1,7 +1,7 @@
 
 OBJECTS := $(subst .cpp,.o,$(wildcard *.cpp))
 
-CXX_FLAGS := -MD -Wall -Wextra -std=c++14
+CXX_FLAGS := -MD -Wall -Wextra -std=c++14 -g
 LD_FLAGS := -lgmp -lgmpxx -lstdc++
 
 all: $(OBJECTS)

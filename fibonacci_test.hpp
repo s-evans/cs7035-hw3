@@ -1,20 +1,62 @@
 #ifndef FIBONACCI_TEST_H
 #define FIBONACCI_TEST_H
 
-inline bool fibonacci_test( mpz_class const& possible_prime )
+#include "discrete_exponent.hpp"
+#include "fibonacci_matrix.hpp"
+
+// Returns the fibonacci order offset for use in the fibonacci test for a given prime
+template<class Prime>
+inline int get_prime_offset( Prime possible_prime )
 {
-    if ( possible_prime < 5 ) {
+    Prime tmp;
+
+    possible_prime -= 1; // p-1
+    tmp = possible_prime;
+    tmp %= 5;
+    if ( tmp == 0 ) { // 5 | (p - 1)
+        return -1;
+    }
+
+    possible_prime -= 1; // p-2
+    tmp = possible_prime;
+    tmp %= 5;
+    if ( tmp == 0 ) { // 5 | (p - 2)
+        return 1;
+    }
+
+    possible_prime -= 1; // p-3
+    tmp = possible_prime;
+    tmp %= 5;
+    if ( tmp == 0 ) { // 5 | (p - 3)
+        return 1;
+    }
+
+    possible_prime -= 1; // p-4
+    tmp = possible_prime;
+    tmp %= 5;
+    if ( tmp == 0 ) { // 5 | (p - 4)
+        return -1;
+    }
+
+    return 0;
+}
+
+template<class Prime>
+inline bool fibonacci_test( Prime possible_prime )
+{
+    const int offset = get_prime_offset( possible_prime );
+
+    if ( offset == 0 ) {
         return false;
     }
 
-    // TODO: false converse???
+    using fmt = fibonacci_matrix<Prime>;
 
-    if ( ( possible_prime - 2 ) % 5 == 0 || ( possible_prime - 3 ) % 5 == 0 ) {
-        // TODO: 
-        return false;
-    } else if ( ( possible_prime - 1 ) % 5 == 0 || ( possible_prime - 4 ) % 5 == 0 ) {
-        // TODO: 
-        return false;
+    auto fmodp = discrete_exponent<typename fmt::type, Prime, Prime>(
+        identity<fmt>::get(), possible_prime + offset, possible_prime, identity<fmt>::get() );
+
+    if ( fmodp(1, 1) == 0 ) {
+        return true;
     }
 
     return false;
