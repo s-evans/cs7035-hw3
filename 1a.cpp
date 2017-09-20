@@ -6,7 +6,8 @@
 int main()
 {
 
-    // k = 15692926; p = 5832618389; r = 5801232537;
+    // k = 1; p = 5801232539; r = 5801232537;
+
     static const mpz_class r = 5801232537_mpz;
 
     mpz_class p = r;
@@ -23,7 +24,7 @@ int main()
             continue;
         }
 
-        if ( fermat_test( p, r ) ) {
+        if ( fermat_test( r, p ) ) {
             std::cout << "k = " << k << "; p = " << p << "; r = " << r << ";" << std::endl;
             return EXIT_SUCCESS;
         }

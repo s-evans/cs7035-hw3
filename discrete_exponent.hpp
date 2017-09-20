@@ -6,6 +6,12 @@
 template<class Base, class Exponent, class Modulus>
 Base discrete_exponent( Base base, Exponent exponent, Modulus const& modulus, Base result = identity<Base>::get() )
 {
+    if ( modulus == 1 ) {
+        return 0;
+    }
+
+    base %= modulus;
+
     while ( exponent > 0 ) {
 
         if ( exponent % 2 == 1 ) {
