@@ -25,11 +25,7 @@ int main()
             continue;
         }
 
-        if ( !fibonacci_test( p ) ) {
-            continue;
-        }
-
-        if ( fermat_test( p, r ) ) {
+        if ( fibonacci_test( p ) ) {
             std::cout << "k = " << k << "; p = " << p << "; r = " << r << ";" << std::endl;
             return EXIT_SUCCESS;
         }
