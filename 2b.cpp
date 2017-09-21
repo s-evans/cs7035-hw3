@@ -6,9 +6,9 @@
 int main()
 {
 
-    // k = 8; p = 5801232617; r = 5801232537;
+    // k = 11; p = 3624838065575969338652497; r = 3624838065575969338652387;
 
-    static const mpz_class r = 5801232537_mpz;
+    static const mpz_class r = 3624838065575969338652387_mpz;
 
     mpz_class p = r;
 
