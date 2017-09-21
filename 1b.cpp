@@ -16,14 +16,6 @@ int main()
 
     for ( unsigned int k = 0 ; k < r ; ++k, p += f ) {
 
-        if ( p % 3 == 0 ) {
-            continue;
-        }
-
-        if ( p % 5 == 0 ) {
-            continue;
-        }
-
         if ( fibonacci_test( p ) ) {
             std::cout << "k = " << k << "; p = " << p << "; r = " << r << ";" << std::endl;
             return EXIT_SUCCESS;
